@@ -1,0 +1,49 @@
+{
+  "name": "api-automation-tests",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "development/apps/api-automation-tests/src",
+  "projectType": "application",
+  "tags": ["type:e2e", "scope:api-testing"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}",
+        "{projectRoot}/reports"
+      ],
+      "options": {
+        "jestConfig": "development/apps/api-automation-tests/jest.config.ts",
+        "outputStyle": "stream",
+        "passWithNoTests": false
+      },
+      "configurations": {
+        "local": {
+          "args": ["--testPathPattern=smoke"]
+        },
+        "smoke": {
+          "args": ["--testPathPattern=smoke"]
+        },
+        "regression": {
+          "args": ["--testPathPattern=regression"]
+        },
+        "health": {
+          "args": ["--testPathPattern=health"]
+        }
+      }
+    },
+    "e2e:watch": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "development/apps/api-automation-tests/jest.config.ts",
+        "watch": true
+      }
+    },
+    "e2e:debug": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "NODE_OPTIONS='--inspect-brk -r tsconfig-paths/register -r ts-node/register' pnpm exec jest --runInBand",
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}

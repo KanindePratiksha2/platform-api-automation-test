@@ -1,0 +1,31 @@
+{
+  "name": "api-automation-tests",
+  "version": "1.0.0",
+  "description": "API Automation Tests using Pactum.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:health": "jest --testPathPatterns=health",
+    "test:auth": "jest --testPathPatterns=auth",
+    "test:evidence": "jest --testPathPatterns=evidence",
+    "test:dpp": "jest --testPathPatterns=dpp",
+    "test:smoke": "jest --testPathPatterns=smoke",
+    "test:regression": "jest --testPathPatterns=regression",
+    "test:examples": "jest --testPathPatterns=examples"
+  },
+  "dependencies": {
+    "pactum": "^3.7.6",
+    "pactum-matchers": "^1.1.6"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^10.4.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.6.0",
+    "dotenv": "^17.4.1",
+    "jest": "^30.3.0",
+    "jest-html-reporter": "^4.4.0",
+    "ts-jest": "^29.4.9",
+    "ts-node": "^10.9.2"
+  }
+}

@@ -19,6 +19,7 @@ describe('Health Check API', () => {
       .expectStatus(TEST_DATA.STATUS_CODES.OK)
       .expectJsonLike({
         status: 'ok',
-      });
+      })
+      .toss();
   });
 });

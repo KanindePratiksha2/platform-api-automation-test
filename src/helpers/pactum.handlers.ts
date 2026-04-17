@@ -182,70 +182,76 @@ export function registerRetryHandlers(): void {
 }
 
 /**
- * Register expect handlers
- * Note: These handlers require Pactum v4+. Comment out if using older version.
+ * Register custom assert handlers
+ * These handlers can be used with .expect() for custom validations
  */
-export function registerExpectHandlers(): void {
-  // Check if expect handlers are supported
-  if (typeof (pactum as any).expect?.addExpectHandler !== 'function') {
-    console.log('ℹ️  Expect handlers not supported in this Pactum version');
-    return;
-  }
-
+export function registerAssertHandlers(): void {
   /**
-   * Custom expectation: Valid JWT token
+   * Custom assertion: Validate JWT token in Authorization header
+   * Usage: .expect('validToken')
    */
-  (pactum as any).expect.addExpectHandler('validToken', (ctx: any) => {
+  pactum.handler.addAssertHandler('validToken', (ctx) => {
     const auth = ctx.res.headers['authorization'];
 
     if (!auth) {
-      throw new Error('Authorization header is missing');
+      return { success: false, message: 'Authorization header is missing' };
     }
 
     if (!auth.startsWith('Bearer ')) {
-      throw new Error('Authorization header should start with "Bearer "');
+      return { success: false, message: 'Authorization header should start with "Bearer "' };
     }
 
     const token = auth.substring(7);
     const parts = token.split('.');
 
     if (parts.length !== 3) {
-      throw new Error('Invalid JWT token format');
+      return { success: false, message: 'Invalid JWT token format' };
     }
+
+    return { success: true };
   });
 
   /**
-   * Custom expectation: Response time within limit
+   * Custom assertion: Response time within limit
+   * Usage: .expect('fastResponse', 2000) - where 2000 is max time in ms
    */
-  (pactum as any).expect.addExpectHandler('fastResponse', (ctx: any) => {
+  pactum.handler.addAssertHandler('fastResponse', (ctx) => {
     const maxTime = ctx.data || 2000; // Default 2 seconds
 
     if (ctx.res.responseTime > maxTime) {
-      throw new Error(
-        `Response time ${ctx.res.responseTime}ms exceeds limit ${maxTime}ms`,
-      );
+      return {
+        success: false,
+        message: `Response time ${ctx.res.responseTime}ms exceeds limit ${maxTime}ms`,
+      };
     }
+
+    return { success: true };
   });
 
   /**
-   * Custom expectation: No GraphQL errors
+   * Custom assertion: No GraphQL errors in response
+   * Usage: .expect('noGraphQLErrors')
    */
-  (pactum as any).expect.addExpectHandler('noGraphQLErrors', (ctx: any) => {
-    if (ctx.res.body.errors) {
-      throw new Error(
-        `GraphQL errors found: ${JSON.stringify(ctx.res.body.errors)}`,
-      );
+  pactum.handler.addAssertHandler('noGraphQLErrors', (ctx) => {
+    if (ctx.res.body.errors && ctx.res.body.errors.length > 0) {
+      return {
+        success: false,
+        message: `GraphQL errors found: ${JSON.stringify(ctx.res.body.errors)}`,
+      };
     }
+
+    return { success: true };
   });
 
   /**
-   * Custom expectation: Valid pagination
+   * Custom assertion: Valid pagination structure
+   * Usage: .expect('validPagination')
    */
-  (pactum as any).expect.addExpectHandler('validPagination', (ctx: any) => {
+  pactum.handler.addAssertHandler('validPagination', (ctx) => {
     const { pagination } = ctx.res.body;
 
     if (!pagination) {
-      throw new Error('Pagination object is missing');
+      return { success: false, message: 'Pagination object is missing' };
     }
 
     const requiredFields = ['page', 'pageSize', 'total', 'totalPages'];
@@ -254,22 +260,25 @@ export function registerExpectHandlers(): void {
     );
 
     if (missingFields.length > 0) {
-      throw new Error(
-        `Missing pagination fields: ${missingFields.join(', ')}`,
-      );
+      return {
+        success: false,
+        message: `Missing pagination fields: ${missingFields.join(', ')}`,
+      };
     }
 
     if (pagination.page < 1) {
-      throw new Error('Page number must be >= 1');
+      return { success: false, message: 'Page number must be >= 1' };
     }
 
     if (pagination.pageSize < 1) {
-      throw new Error('Page size must be >= 1');
+      return { success: false, message: 'Page size must be >= 1' };
     }
 
     if (pagination.total < 0) {
-      throw new Error('Total must be >= 0');
+      return { success: false, message: 'Total must be >= 0' };
     }
+
+    return { success: true };
   });
 }
 
@@ -279,13 +288,6 @@ export function registerExpectHandlers(): void {
 export function registerAllHandlers(): void {
   registerSpecHandlers();
   registerRetryHandlers();
-  registerExpectHandlers();
+  registerAssertHandlers();
   console.log('📦 Pactum handlers registered');
 }
-
-export default {
-  registerAllHandlers,
-  registerSpecHandlers,
-  registerRetryHandlers,
-  registerExpectHandlers,
-};

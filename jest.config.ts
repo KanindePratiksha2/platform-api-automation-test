@@ -14,7 +14,7 @@ export default {
     'node_modules/(?!(@faker-js)/)',
   ],
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../coverage/development/apps/api-automation-tests',
+  coverageDirectory: './coverage',
   testMatch: ['**/tests/**/*.spec.ts', '**/tests/**/*.test.ts'],
   setupFilesAfterEnv: ['<rootDir>/src/setup/jest.setup.ts'],
   moduleNameMapper: {
@@ -22,6 +22,7 @@ export default {
     '^@helpers/(.*)$': '<rootDir>/src/helpers/$1',
     '^@fixtures/(.*)$': '<rootDir>/src/fixtures/$1',
     '^@validators/(.*)$': '<rootDir>/src/validators/$1',
+    '^@services$': '<rootDir>/src/services/index.ts',
     '^@services/(.*)$': '<rootDir>/src/services/$1',
     '^@api-types/(.*)$': '<rootDir>/src/types/$1',
   },

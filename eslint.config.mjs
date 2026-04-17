@@ -1,17 +1,37 @@
-import baseConfig from '../../../eslint.base.config.mjs';
+// ESLint configuration for API Automation Tests
+// Standalone configuration - no base config needed
 
 export default [
-  ...baseConfig,
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
-    rules: {},
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+    },
+    rules: {
+      // Add project-specific rules here
+    },
   },
   {
     files: ['**/*.ts', '**/*.tsx'],
-    rules: {},
+    rules: {
+      // TypeScript-specific rules
+    },
   },
   {
     files: ['**/*.js', '**/*.jsx'],
-    rules: {},
+    rules: {
+      // JavaScript-specific rules
+    },
+  },
+  {
+    ignores: [
+      'node_modules/**',
+      'dist/**',
+      'coverage/**',
+      'reports/**',
+      '*.config.js',
+      '*.config.mjs',
+    ],
   },
 ];

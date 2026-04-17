@@ -26,9 +26,20 @@ export async function loginToTrek(): Promise<string> {
   const warehouseId = process.env['TREK_WAREHOUSE_ID'];
   const language = process.env['TREK_LANGUAGE'] || 'en_US';
 
-  if (!trekBaseUrl || !username || !password) {
+  // Validate all required Trek parameters
+  if (!trekBaseUrl || !username || !password || !clientId || !roleId || !organizationId || !warehouseId) {
+    const missing = [];
+    if (!trekBaseUrl) missing.push('TREK_BASE_URL');
+    if (!username) missing.push('TREK_USERNAME');
+    if (!password) missing.push('TREK_PASSWORD');
+    if (!clientId) missing.push('TREK_CLIENT_ID');
+    if (!roleId) missing.push('TREK_ROLE_ID');
+    if (!organizationId) missing.push('TREK_ORGANIZATION_ID');
+    if (!warehouseId) missing.push('TREK_WAREHOUSE_ID');
+    
     throw new Error(
-      'Trek login credentials not configured. Set TREK_BASE_URL, TREK_USERNAME, and TREK_PASSWORD in .env'
+      `Trek login credentials not configured. Missing required variables: ${missing.join(', ')}. ` +
+      'Please set all required Trek variables in .env file.'
     );
   }
 
@@ -45,9 +56,9 @@ export async function loginToTrek(): Promise<string> {
           clientId: clientId,
           roleId: roleId,
           organizationId: organizationId,
+          warehouseId: warehouseId,
+          language: language,
         },
-        language: language,
-        menuIseeId: 10,
       })
       .expectStatus(200);
 
@@ -109,12 +120,20 @@ export function clearTokenCache(): void {
 }
 
 /**
- * Get authorization headers with Bearer token
+ * Get authorization headers with Bearer token and API Key
  * @param token - Access token
- * @returns Headers object with Authorization
+ * @returns Headers object with Authorization and X-API-Key
  */
 export function getBearerAuthHeaders(token: string): Record<string, string> {
-  return {
+  const headers: Record<string, string> = {
     Authorization: `Bearer ${token}`,
   };
+  
+  // Add API Key if configured
+  const apiKey = process.env['API_KEY'];
+  if (apiKey && apiKey !== 'your-api-key-here') {
+    headers['X-API-Key'] = apiKey;
+  }
+  
+  return headers;
 }

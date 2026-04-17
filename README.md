@@ -7,7 +7,7 @@ API automation tests for CTP Platform Services using PactumJS.
 1. **Install dependencies:**
 
    ```bash
-   pnpm install
+   npm install
    ```
 
 2. **Configure environment:**
@@ -21,27 +21,36 @@ API automation tests for CTP Platform Services using PactumJS.
    Required environment variables:
    - `TEST_ENV` - Environment to test against (local, dev, sand, prod)
    - `LOCAL_BASE_URL` / `DEV_BASE_URL` / etc. - API base URLs
-   - `TREK_AUTH_API_URL` - Trek authentication API URL
-   - `TREK_AUTH_USERNAME` - Trek username
-   - `TREK_AUTH_PASSWORD` - Trek password
+   - `API_KEY` - API key for authenticated platform endpoints (REQUIRED)
+   - `AUTH_TOKEN` - Static JWT token (optional if using Trek login)
+   
+   **Trek Authentication (all required if not using AUTH_TOKEN):**
+   - `TREK_BASE_URL` - Trek authentication API URL
+   - `TREK_USERNAME` - Trek username
+   - `TREK_PASSWORD` - Trek password
+   - `TREK_CLIENT_ID` - Trek client ID
+   - `TREK_ROLE_ID` - Trek role ID
+   - `TREK_ORGANIZATION_ID` - Trek organization ID
+   - `TREK_WAREHOUSE_ID` - Trek warehouse ID
+   - `TREK_LANGUAGE` - Trek language (optional, defaults to en_US)
 
 ## Running Tests
 
-### Using pnpm scripts:
+### Using npm scripts:
 
 ```bash
 # Run all tests
-pnpm test
+npm test
 
 # Run smoke tests only
-pnpm run test:smoke
+npm run test:smoke
 
 # Run regression tests only
-pnpm run test:regression
+npm run test:regression
 
 # Run specific test file
-pnpm run test:health
-pnpm run test:auth
+npm run test:health
+npm run test:auth
 ```
 
 ### Using Nx:
@@ -85,9 +94,22 @@ Test reports are generated in the `reports/` directory after each test run.
    ```env
    TEST_ENV=local
    LOCAL_BASE_URL=http://localhost:3000
-   TEST_USERNAME=your-email@example.com
-   TEST_PASSWORD=your-password
-   TEST_API_KEY=your-api-key
+   
+   # API Key (required for authenticated endpoints)
+   API_KEY=your-api-key-here
+   
+   # Option 1: Use static JWT token
+   AUTH_TOKEN=your-jwt-token-here
+   
+   # Option 2: Use Trek login (all fields required if AUTH_TOKEN not provided)
+   TREK_BASE_URL=https://your-trek-host.com/api/v1
+   TREK_USERNAME=your-email@theprovenancechain.com
+   TREK_PASSWORD=your-password
+   TREK_CLIENT_ID=1000001
+   TREK_ROLE_ID=PCN-Test User
+   TREK_ORGANIZATION_ID=1000001
+   TREK_WAREHOUSE_ID=1000001
+   TREK_LANGUAGE=en_US
    ```
 
 ### First Test Run
@@ -98,8 +120,8 @@ Run a simple smoke test to verify setup:
 # Using NX (recommended in monorepo)
 nx test api-automation-tests --testPathPattern=health
 
-# Or using pnpm
-pnpm test:health
+# Or using npm
+npm run test:health
 ```
 
 ## 🧪 Running Tests
@@ -127,21 +149,21 @@ nx test api-automation-tests --coverage
 
 ```bash
 # Run all tests
-pnpm test
+npm test
 
 # Run specific test suites
-pnpm test:smoke         # Quick smoke tests
-pnpm test:regression    # Full regression suite
-pnpm test:health        # Health check tests only
-pnpm test:auth          # Authentication tests
-pnpm test:evidence      # Evidence API tests
-pnpm test:dpp           # DPP API tests
+npm run test:smoke         # Quick smoke tests
+npm run test:regression    # Full regression suite
+npm run test:health        # Health check tests only
+npm run test:auth          # Authentication tests
+npm run test:evidence      # Evidence API tests
+npm run test:dpp           # DPP API tests
 
 # Watch mode
-pnpm test:watch
+npm run test:watch
 
 # Debug mode
-pnpm test:debug
+npm run test:debug
 ```
 
 ### Environment-Specific Testing
@@ -500,7 +522,7 @@ Use descriptive test file names and organize by test type:
 nx reset
 
 # Reinstall dependencies
-pnpm install
+npm install
 
 # Check TypeScript config
 cat tsconfig.json

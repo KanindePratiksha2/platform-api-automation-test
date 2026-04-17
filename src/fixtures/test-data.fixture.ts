@@ -272,14 +272,3 @@ export class ErrorFixture {
     };
   }
 }
-
-/**
- * Export all fixtures
- */
-export default {
-  UserFixture,
-  GraphQLFixture,
-  PaginationFixture,
-  CommonFixture,
-  ErrorFixture,
-};

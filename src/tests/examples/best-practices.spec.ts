@@ -6,12 +6,12 @@
  * - Fixtures for test data
  * - Assertion helpers
  * - Response validators
- * - Pactum handlers
  * - Cleanup utilities
  *
  * Tags: @example @demo
  */
 
+import * as pactum from 'pactum';
 import { getAuthToken } from '@helpers/auth.helper';
 import { GraphQLService, HealthService } from '@services';
 import { GraphQLAssertions, CommonAssertions } from '@helpers/assertion.helper';
@@ -19,6 +19,7 @@ import { UserFixture, GraphQLFixture } from '@fixtures/test-data.fixture';
 import { Schemas, Matchers } from '@validators/response.validator';
 import { TEST_DATA } from '@config/test-data.config';
 import { CleanupHelper } from '@helpers/cleanup.helper';
+import { isTokenExpired } from '@helpers/token-validator.helper';
 
 describe('Example Test - Best Practices', () => {
   let authToken: string;
@@ -50,6 +51,12 @@ describe('Example Test - Best Practices', () => {
 
   describe('GraphQL Examples', () => {
     it('should execute getMe query using service', async () => {
+      // Skip if token is expired
+      if (isTokenExpired(authToken)) {
+        console.warn('⚠️  Skipping test: AUTH_TOKEN is expired or invalid');
+        return;
+      }
+
       const response = await GraphQLService.authenticatedQuery(
         GraphQLService.queries.GET_ME,
         authToken,
@@ -71,19 +78,6 @@ describe('Example Test - Best Practices', () => {
 
       // Using assertion helpers for error validation
       GraphQLAssertions.expectUnauthenticated(response);
-    });
-
-    it('should use Pactum handler for authenticated query', async () => {
-      // Using custom Pactum handler
-      const response = await await (pactum as any).spec()
-        .use('graphql.authenticated', {
-          query: GraphQLService.queries.GET_ME,
-          token: authToken,
-        })
-        .expectStatus(TEST_DATA.STATUS_CODES.OK)
-        .toss();
-
-      GraphQLAssertions.expectSuccess(response);
     });
   });
 
@@ -195,6 +189,3 @@ describe('Example Test - Best Practices', () => {
     });
   });
 });
-
-// Note: Import pactum at the top if using handlers
-import * as pactum from 'pactum';

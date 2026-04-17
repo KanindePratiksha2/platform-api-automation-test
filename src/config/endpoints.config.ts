@@ -13,7 +13,6 @@ export const API_ENDPOINTS = {
   GRAPHQL: '/graphql',
 
   // Authentication
+  PROFILE: '/api/auth/profile',
   TREK_LOGIN: '/auth/tokens',
 };
-
-export default API_ENDPOINTS;

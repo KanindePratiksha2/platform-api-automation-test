@@ -71,5 +71,3 @@ if (!environments[currentEnv]) {
 }
 
 export const config: EnvironmentConfig = environments[currentEnv];
-
-export default config;

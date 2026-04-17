@@ -141,7 +141,7 @@ Use predefined handlers for common patterns:
 ```typescript
 import * as pactum from 'pactum';
 
-// Authenticated GraphQL request
+// Spec Handler: Authenticated GraphQL request
 await pactum.spec()
   .use('graphql.authenticated', {
     query: '{ getMe }',
@@ -149,7 +149,7 @@ await pactum.spec()
   })
   .expectStatus(200);
 
-// Paginated request
+// Spec Handler: Paginated request
 await pactum.spec()
   .use('rest.paginated', {
     endpoint: '/users',
@@ -158,6 +158,19 @@ await pactum.spec()
     token: authToken
   })
   .expectStatus(200);
+
+// Assert Handler: Custom validations
+await pactum.spec()
+  .get('/api/data')
+  .expectStatus(200)
+  .expect('noGraphQLErrors')        // Validates no GraphQL errors in response
+  .expect('fastResponse', 1000);    // Validates response time < 1000ms
+
+// Available Assert Handlers:
+// - 'validToken' - Validates JWT token in Authorization header
+// - 'fastResponse' - Validates response time (param: max time in ms)
+// - 'noGraphQLErrors' - Validates no GraphQL errors in response body
+// - 'validPagination' - Validates pagination object structure
 ```
 
 ## 📊 Enhanced Status Codes

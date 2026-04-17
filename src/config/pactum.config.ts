@@ -52,8 +52,3 @@ export function cleanupPactum(): void {
   // Add any cleanup logic here if needed
   // Note: handler.clear() and state.clear() are not available in newer versions
 }
-
-export default {
-  initializePactum,
-  cleanupPactum,
-};

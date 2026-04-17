@@ -7,3 +7,4 @@
 export { BaseAPIService } from './base.service';
 export { GraphQLService } from './graphql.service';
 export { HealthService } from './health.service';
+export { ProfileService } from './profile.service';

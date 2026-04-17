@@ -378,14 +378,3 @@ export class CommonAssertions {
     }
   }
 }
-
-/**
- * Export all assertion helpers
- */
-export default {
-  GraphQLAssertions,
-  RestAssertions,
-  ValidationAssertions,
-  PaginationAssertions,
-  CommonAssertions,
-};

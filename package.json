@@ -7,12 +7,10 @@
     "test:watch": "jest --watch",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:health": "jest --testPathPatterns=health",
-    "test:auth": "jest --testPathPatterns=auth",
-    "test:evidence": "jest --testPathPatterns=evidence",
-    "test:dpp": "jest --testPathPatterns=dpp",
+    "test:profile": "jest --testPathPatterns=profile",
+    "test:graphql": "jest --testPathPatterns=graphql",
     "test:smoke": "jest --testPathPatterns=smoke",
-    "test:regression": "jest --testPathPatterns=regression",
-    "test:examples": "jest --testPathPatterns=examples"
+    "test:regression": "jest --testPathPatterns=regression"
   },
   "dependencies": {
     "pactum": "^3.7.6",

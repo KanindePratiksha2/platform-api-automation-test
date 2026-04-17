@@ -7,6 +7,9 @@
 export const TEST_DATA = {
   // Authentication Token (from iDempiere)
   AUTH_TOKEN: process.env['AUTH_TOKEN'] || '',
+  
+  // API Key for platform endpoints
+  API_KEY: process.env['API_KEY'] || '',
 
   // HTTP Status Codes
   STATUS_CODES: {
@@ -66,5 +69,3 @@ export const TEST_DATA = {
     INTERNAL_SERVER_ERROR: 'INTERNAL_SERVER_ERROR',
   },
 };
-
-export default TEST_DATA;

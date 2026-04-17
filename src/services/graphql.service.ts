@@ -154,5 +154,3 @@ export class GraphQLService extends BaseAPIService {
     `,
   };
 }
-
-export default GraphQLService;

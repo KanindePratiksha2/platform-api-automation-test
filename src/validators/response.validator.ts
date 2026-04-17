@@ -238,9 +238,3 @@ export class ResponseValidator {
     return Array.isArray(data) && data.length > 0;
   }
 }
-
-export default {
-  Schemas,
-  Matchers,
-  ResponseValidator,
-};

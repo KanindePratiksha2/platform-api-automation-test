@@ -20,9 +20,17 @@ export class BaseAPIService {
    * Add authorization header to request
    */
   protected static withAuth(spec: any, token: string) {
-    return spec.withHeaders({
+    const headers: Record<string, string> = {
       Authorization: `Bearer ${token}`,
-    });
+    };
+    
+    // Add API Key if configured
+    const apiKey = process.env['API_KEY'];
+    if (apiKey && apiKey !== 'your-api-key-here') {
+      headers['X-API-Key'] = apiKey;
+    }
+    
+    return spec.withHeaders(headers);
   }
 
   /**
@@ -53,5 +61,3 @@ export class BaseAPIService {
     return spec.stores(key, path);
   }
 }
-
-export default BaseAPIService;

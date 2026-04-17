@@ -211,5 +211,3 @@ export class CleanupHelper {
     return this.createdResources.filter((r) => r.type === type).length;
   }
 }
-
-export default CleanupHelper;

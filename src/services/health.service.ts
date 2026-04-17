@@ -41,5 +41,3 @@ export class HealthService extends BaseAPIService {
     return Promise.all(requests);
   }
 }
-
-export default HealthService;
